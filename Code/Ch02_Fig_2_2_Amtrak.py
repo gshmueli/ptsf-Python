@@ -9,7 +9,7 @@ from ptsf_setup import ptsf_theme
 style.use('ggplot') ## ggplot theme for plots
 fig, ax = plt.subplots(figsize=(5, 3)) ## aspect ratio 5 x 3
 
-ridership = pd.read_csv('ptsf-Python/Data/Amtrak data.csv', parse_dates=['Month'], index_col='Month')
+ridership = pd.read_csv('ptsf-Python/Data/Amtrak.csv', parse_dates=['Month'], index_col='Month')
 ax = plot_series(ridership, ax=ax)
 
 ptsf_theme(ax, colors=['black'], idx=[0]) ## override some sktime.plot_series() defaults

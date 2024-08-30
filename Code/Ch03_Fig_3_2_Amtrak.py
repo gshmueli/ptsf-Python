@@ -10,7 +10,7 @@ from sktime.forecasting.trend import PolynomialTrendForecaster
 from ptsf_setup import ptsf_theme
 from ptsf_setup import ptsf_train_test
 
-ridership = pd.read_csv('ptsf-Python/Data/Amtrak data.csv', parse_dates=['Month'], index_col='Month')
+ridership = pd.read_csv('ptsf-Python/Data/Amtrak.csv', parse_dates=['Month'], index_col='Month')
 
 test_size = len(ridership.truncate(before='2001-04-01'))
 ridership_train, ridership_test = temporal_train_test_split(ridership, test_size=test_size)

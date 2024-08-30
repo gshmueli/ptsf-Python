@@ -7,7 +7,7 @@ from sktime.utils import plot_series
 from ptsf_setup import ptsf_theme
 from ptsf_setup import ptsf_train_test
 
-ridership = pd.read_csv('ptsf-Python/Data/Amtrak data.csv', parse_dates=['Month'], index_col='Month')
+ridership = pd.read_csv('ptsf-Python/Data/Amtrak.csv', parse_dates=['Month'], index_col='Month')
 
 train = ridership.truncate(after='2001-03-31')
 test = ridership.truncate(before='2001-04-01')
