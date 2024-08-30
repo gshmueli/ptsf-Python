@@ -9,7 +9,7 @@ from sktime.forecasting.base import ForecastingHorizon
 from sktime.forecasting.trend import PolynomialTrendForecaster
 from ptsf_setup import ptsf_theme
 
-ridership = pd.read_csv('ptsf-Python/Data/Amtrak data.csv', parse_dates=['Month'], index_col='Month')
+ridership = pd.read_csv('ptsf-Python/Data/Amtrak.csv', parse_dates=['Month'], index_col='Month')
 
 style.use('ggplot') ## ggplot theme for plots
 figure, axs = plt.subplots(2, 1, sharex=False, figsize=(6, 4)) ## 2-by-1 grid; aspect ratio 6:4
