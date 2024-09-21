@@ -17,15 +17,15 @@ style.use('ggplot')
 ridership = pd.read_csv('ptsf-Python/Data/Amtrak.csv', parse_dates=['Month'], index_col='Month')
 diff_twice = ridership.diff(12).diff(1).dropna().copy()
 diff_twice.index = diff_twice.index.to_period('M')
-n_test = 36
+N_TEST = 36
 diff_twice_train, diff_twice_test = \
-    temporal_train_test_split(diff_twice, test_size=n_test)
+    temporal_train_test_split(diff_twice, test_size=N_TEST)
 
 ses = ExponentialSmoothing(smoothing_level=0.2) ## trend=seasonal=None
 ses.fit(diff_twice_train)
-fh_fitted = ForecastingHorizon(-np.arange(len(diff_twice_train)), is_relative=True)
+fh_fitted = ForecastingHorizon(diff_twice_train.index, is_relative=False)
 ses_fitted = ses.predict(fh_fitted)
-fh = ForecastingHorizon(np.arange(1,n_test +1), is_relative=True)
+fh = ForecastingHorizon(diff_twice_test.index, is_relative=False)
 ses_pred = ses.predict(fh)
 
 fig, ax = plt.subplots(figsize=(5.5,3.5))
