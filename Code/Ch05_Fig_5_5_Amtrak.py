@@ -23,10 +23,8 @@ diff_twice_train, diff_twice_test = \
 
 ses = ExponentialSmoothing(smoothing_level=0.2) ## trend=seasonal=None
 ses.fit(diff_twice_train)
-fh_fitted = ForecastingHorizon(diff_twice_train.index, is_relative=False)
-ses_fitted = ses.predict(fh_fitted)
-fh = ForecastingHorizon(diff_twice_test.index, is_relative=False)
-ses_pred = ses.predict(fh)
+ses_fitted = ses.predict(diff_twice_train.index)
+ses_pred = ses.predict(diff_twice_test.index)
 
 fig, ax = plt.subplots(figsize=(5.5,3.5))
 ax = plot_series(diff_twice, ses_fitted, ses_pred, markers=['']*3,
