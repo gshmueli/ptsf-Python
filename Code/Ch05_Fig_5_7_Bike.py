@@ -21,12 +21,12 @@ rides_zoom = rides.iloc[:(4*24)] # 4 days
 fig, ax = plt.subplots(nrows=2, ncols=1, figsize=(8.5,6.5))
 plt.subplots_adjust(hspace=0.5)
 
-ax[0] = plot_series(rides_train, markers=[''], x_label='Week', y_label="Hourly Bike Rentals",
+ax[0] = plot_series(rides_train, markers=[''], x_label='Week', y_label="Hourly bike rentals",
                 title='Weekly Pattern (3 weeks)', colors=['black'], ax=ax[0])
 ax[0].xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=mdates.SU)) # xticks on Sundays 00:00
 ax[0].xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d')) # xtick format
 
-ax[1] = plot_series(rides_zoom, markers=[''], x_label='Day', y_label="Hourly Bike Rentals",
+ax[1] = plot_series(rides_zoom, markers=[''], x_label='Day', y_label="Hourly bike rentals",
                 title='Daily Pattern (4 days)', colors=['black'], ax=ax[1])
 ax[1].xaxis.set_major_locator(mdates.HourLocator(byhour=[6, 18]))
 ax[1].xaxis.set_major_formatter(mdates.DateFormatter('%m-%d:%H'))
