@@ -4,7 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.style as style
 from sktime.utils import plot_series
-from sktime.forecasting.base import ForecastingHorizon
 from sktime.forecasting.model_selection import temporal_train_test_split
 from sktime.forecasting.trend import PolynomialTrendForecaster
 from ptsf_setup import ptsf_theme
@@ -18,10 +17,10 @@ ridership_train, ridership_test = temporal_train_test_split(ridership, test_size
 # Fit model to training period
 forecaster = PolynomialTrendForecaster(degree=2)
 forecaster.fit(ridership_train)
-fitted_values = forecaster.predict(ForecastingHorizon(ridership_train.index, is_relative=False))
+fitted_values = forecaster.predict(ridership_train.index)
 
 # use model to generate forecasts for test period
-pred_values = forecaster.predict(ForecastingHorizon(ridership_test.index, is_relative=False))
+pred_values = forecaster.predict(ridership_test.index)
 
 style.use('ggplot') ## ggplot theme for plots
 fig, ax = plt.subplots(figsize=(6, 4))
