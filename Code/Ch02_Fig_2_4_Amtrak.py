@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import matplotlib.style as style
 from matplotlib.dates import MonthLocator
 from sktime.utils import plot_series
-from sktime.forecasting.base import ForecastingHorizon
 from sktime.forecasting.trend import PolynomialTrendForecaster
 from ptsf_setup import ptsf_theme
 
@@ -16,8 +15,7 @@ figure, axs = plt.subplots(2, 1, sharex=False, figsize=(6, 4)) ## 2-by-1 grid; a
 
 forecaster = PolynomialTrendForecaster(degree=2)
 forecaster.fit(ridership)
-fh = ForecastingHorizon(ridership.index, is_relative=False)
-fitted_values = forecaster.predict(fh)
+fitted_values = forecaster.predict(ridership.index)
 
 ridership_zoom = ridership.loc['1997-01-01':'2000-12-31']
 
