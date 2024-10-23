@@ -1,7 +1,13 @@
 """ Code to create Figure 3-6 """
 
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 import matplotlib.style as style
-from ptsf_setup import *
+from sktime.forecasting.base import ForecastingHorizon
+from sktime.utils import plot_series
+from sktime.forecasting.ets import AutoETS
+#from ptsf_setup import *
    
 tumblr = pd.read_csv('ptsf-Python/Data/Tumblr.csv', parse_dates=True, index_col=0)
 tumblr.index = tumblr.index.to_period('M')
@@ -17,19 +23,14 @@ def customize_plot(ax, title):
     ax.set_xticklabels(['2010', '2015', '2020'])
     ax.get_legend().remove()
 
-def do_one_analysis(forecaster, train, fh, coverage, ax, xlab, ylab):
-    forecaster.fit(train)
-    pred = forecaster.predict(fh)
-    pred_interval = forecaster.predict_interval(fh=fh, coverage=coverage)
-    plot_series(train, pred, ax=ax, markers=['',''], pred_interval=pred_interval, x_label=xlab, y_label=ylab)
-    return ax
-
 fh = ForecastingHorizon(np.arange(1,116), is_relative=True)
-coverage = np.array([.8,.6,.4,.2])
 models = ["AAN","MMN","MMdN"]
 for i, z in enumerate([("add", "add", False), ("mul", "mul", False), ("mul", "mul", True)]):
-    forecaster = AutoETS(error=z[0], trend=z[1], damped_trend=z[2])
-    axs[i] = do_one_analysis(forecaster, views, fh, coverage, axs[i], "", "People (in millions)")
+    forecaster = AutoETS(error=z[0], trend=z[1], damped_trend=z[2]).fit(views)
+    pred = forecaster.predict(fh)
+    pred_interval = forecaster.predict_interval(fh=fh, coverage=np.array([.8,.6,.4,.2]))
+    plot_series(views, pred, ax=axs[i], markers=['',''], colors=['black','blue'], 
+                pred_interval=pred_interval, y_label="People (in millions)")
     customize_plot(axs[i], f"ETS({models[i]})")
 
 plt.savefig('Ch03_Fig_3_6_tumblr.pdf', format='pdf', bbox_inches='tight')
