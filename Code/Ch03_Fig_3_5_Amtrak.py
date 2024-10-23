@@ -5,7 +5,6 @@ import matplotlib.style as style
 
 from sktime.split import temporal_train_test_split
 from sktime.forecasting.trend import PolynomialTrendForecaster
-from sktime.forecasting.base import ForecastingHorizon
 from sktime.utils import plot_series
 
 from ptsf_setup import ptsf_theme
@@ -21,11 +20,10 @@ ridership_train, ridership_test = temporal_train_test_split(ridership, test_size
 
 forecaster = PolynomialTrendForecaster(degree=2, prediction_intervals=True)
 forecaster.fit(ridership_train)
-fitted_values = forecaster.predict(ForecastingHorizon(ridership_train.index, is_relative=False))
-pred_values = forecaster.predict(ForecastingHorizon(ridership_test.index, is_relative=False))
+fitted_values = forecaster.predict(ridership_train.index)
+pred_values = forecaster.predict(ridership_test.index)
 
-fh = ForecastingHorizon(ridership_test.index, is_relative=False)
-pred_interval = forecaster.predict_interval(fh, coverage=[0.95])
+pred_interval = forecaster.predict_interval(ridership_test.index, coverage=[0.95])
 ax = plot_series(ridership, fitted_values, pred_values, ax=ax, pred_interval=pred_interval)
 
 ptsf_theme(ax, colors=['black','blue','blue'], idx=[0,1,2], lty=['-', '-', '--'])
