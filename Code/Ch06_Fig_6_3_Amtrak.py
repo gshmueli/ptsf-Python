@@ -20,11 +20,11 @@ style.use('ggplot')
 
 lm = ARDL(lags=0, trend='ct', seasonal=False, auto_ardl=False)
 lm.fit(ridership_train, X=None)
-fitted_values = lm.predict(ridership_train.index)
+fitted = lm.predict(ridership_train.index)
 pred = lm.predict(ridership_test.index)
 
 fig, ax = plt.subplots(figsize=(6,4))
-ax = plot_series(ridership, fitted_values, pred, markers=['']*3,
+ax = plot_series(ridership, fitted, pred, markers=['']*3,
             labels=None, x_label="", y_label="Ridership", ax=ax)
 ptsf_theme(ax, colors=['black','blue','blue'], idx=[0,1,2], lty=['-','-','--'])
 ax = ptsf_train_test(ax, ridership_train.index, ridership_test.index)
