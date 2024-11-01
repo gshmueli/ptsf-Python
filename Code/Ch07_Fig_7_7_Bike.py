@@ -3,6 +3,7 @@ import warnings
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.style as style
 from sktime.forecasting.ardl import ARDL
 from sktime.forecasting.model_selection import temporal_train_test_split
 from sktime.utils import plot_series
@@ -12,6 +13,7 @@ from ptsf_setup import ptsf_theme
 from ptsf_setup import ptsf_train_test
 
 warnings.filterwarnings('ignore', category=FutureWarning)
+style.use('ggplot')
 
 def accuracy_df(method, y, y_pred, y_train):
     metrics = {
