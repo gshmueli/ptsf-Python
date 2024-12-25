@@ -1,4 +1,4 @@
-""" Code to test NNetAR """
+""" Code for Figure 8.5 and Table 8.2 """
 import os
 import warnings
 import pandas as pd
@@ -44,11 +44,11 @@ ridership['Month'] = pd.to_datetime(ridership['Month'], format='%Y %b')
 ridership.set_index('Month', inplace=True)
 ridership.index = ridership.index.to_period('M').to_timestamp('M')  # Convert to month-end frequency
 
-TEST_SIZE = 36
+TEST_SIZE = 6
 SP = 12
 train, test = temporal_train_test_split(ridership, test_size=TEST_SIZE)
 
-nnetar = NNetAR(p=11, P=1, period=SP, n_nodes=7, n_networks=20, scale_inputs=False)
+nnetar = NNetAR(p=11, P=1, period=SP, n_nodes=7, n_networks=20, scale_inputs=False, auto=True)
 nnetar.fit(train)
 pred = nnetar.predict(test.index)
 fitted = nnetar.predict(train.index[SP:])
