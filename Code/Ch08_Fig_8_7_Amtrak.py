@@ -4,6 +4,7 @@ import warnings
 import random
 import pandas as pd
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.style as style
 
