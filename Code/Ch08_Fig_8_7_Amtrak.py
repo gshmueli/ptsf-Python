@@ -35,10 +35,11 @@ warnings.filterwarnings("ignore", message="RecursiveReductionForecaster is exper
 warnings.filterwarnings("ignore", category=DataConversionWarning)
 warnings.filterwarnings("ignore", message="X does not have valid feature names")
 
+matplotlib.use('TkAgg') 
 style.use('ggplot')
 
 # Set random seed for reproducibility
-RANDOM_SEED = 45
+RANDOM_SEED = 48
 np.random.seed(RANDOM_SEED)
 tf.random.set_seed(RANDOM_SEED)
 random.seed(RANDOM_SEED)
