@@ -12,17 +12,17 @@ rainfall['rainy'] = np.where(rainfall['RainfallAmount_millimetres'] > 0, 1, 0)
 rainfall['Year'] = rainfall.index.year
 rainfall['Month'] = rainfall.index.month
 
-monthly_rainfall = pd.DataFrame({'pct_days': rainfall.groupby('Month')['rainy'].mean() * 100})
-monthly_yearly_rainfall = pd.DataFrame({'pct_days': rainfall.groupby(['Year', 'Month'])['rainy'].mean() * 100})
+monthly_rain = pd.DataFrame({'pct': rainfall.groupby('Month')['rainy'].mean() * 100})
+monthly_yearly_rain = pd.DataFrame({'pct': rainfall.groupby(['Year', 'Month'])['rainy'].mean() * 100})
 
-pivot_df = monthly_yearly_rainfall.reset_index().pivot(index='Month', columns='Year', values='pct_days')
+pivot_df = monthly_yearly_rain.reset_index().pivot(index='Month', columns='Year', values='pct')
 
 plt.figure(figsize=(10, 6))
-linestyles = ['-', '--', '-.', ':']
-for i, year in enumerate(pivot_df.columns):    
-    plt.plot(pivot_df.index, pivot_df[year], label=str(year), linestyle=linestyles[i % len(linestyles)])
+lstyle = ['-', '--', '-.', ':']
+for i, year in enumerate(pivot_df.columns):
+    plt.plot(pivot_df.index, pivot_df[year], label=str(year), linestyle=lstyle[i % len(lstyle)])
 
-plt.plot(monthly_rainfall.index, monthly_rainfall['pct_days'], color='black', linestyle='--',
+plt.plot(monthly_rain.index, monthly_rain['pct'], color='black', linestyle='--',
          linewidth=2, label='Average')
 
 plt.xlabel('Month')
