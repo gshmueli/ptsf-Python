@@ -23,20 +23,20 @@ ridership.index = pd.to_datetime(ridership.index, format='%Y %b')
 
 y = ridership.copy()
 y.index = y.index.to_period('M').to_timestamp('M')
-n_valid = 36
-y_train, y_valid = temporal_train_test_split(y, test_size=n_valid)
+n_test = 36
+y_train, y_test = temporal_train_test_split(y, test_size=n_test)
 
 ## Table 3-4
 y_train.index = y_train.index.to_period('M')
 f_naive = NaiveForecaster(strategy='last', sp=1).fit(y_train)
 f_naive_seas = NaiveForecaster(strategy='last', sp=12).fit(y_train)
 
-pred_naive = f_naive.predict(fh=np.arange(n_valid)+1).squeeze()
-pred_seas = f_naive_seas.predict(fh=np.arange(n_valid)+1).squeeze()
+pred_naive = f_naive.predict(fh=np.arange(n_test)+1).squeeze()
+pred_seas = f_naive_seas.predict(fh=np.arange(n_test)+1).squeeze()
 
-y_valid.index = pred_seas.index
-df = pd.DataFrame({'Actual': y_valid.squeeze(), 'Naive Forecast': pred_naive, 
-                   'Seasonal Naive Forecast': pred_seas}, index=y_valid.index)
+y_test.index = pred_seas.index
+df = pd.DataFrame({'Actual': y_test.squeeze(), 'Naive Forecast': pred_naive, 
+                   'Seasonal Naive Forecast': pred_seas}, index=y_test.index)
 df.index = df.index.strftime("%b %Y")
 
 print(df.head(3))
@@ -45,8 +45,8 @@ print(df.tail(1).to_string(header=False))
 
 ## Table 3-5
 
-df2 = pd.concat([accuracy_df("Naive Forecast", y_valid, pred_naive), \
-            accuracy_df("Seasonal Naive Forecast", y_valid, pred_seas)])
+df2 = pd.concat([accuracy_df("Naive Forecast", y_test, pred_naive), \
+            accuracy_df("Seasonal Naive Forecast", y_test, pred_seas)])
 df2['MAPE'] = df2['MAPE'].multiply(100)
 df2[['MAE', 'RMSE', 'MAPE']] = df2[['MAE', 'RMSE', 'MAPE']].round(3)
 df2['MAPE'] = df2['MAPE'].map('{:,.3f}%'.format)

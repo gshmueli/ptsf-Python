@@ -17,7 +17,7 @@ ridership.index = pd.to_datetime(ridership.index, format='%Y %b')
 y = ridership.copy()
 y.index = y.index.to_period('M').to_timestamp('M')
 n_test = 36
-y_train, y_valid = temporal_train_test_split(y, test_size=n_test)
+y_train, y_test = temporal_train_test_split(y, test_size=n_test)
 forecaster = NaiveForecaster(strategy='last')
 
 ## Roll-forward calculations
@@ -36,9 +36,9 @@ mean_values = list(map(lambda x: np.mean(np.array(x)), [mae, rmse, mape]))
 ## Fixed partition calculations
 forecaster.fit(y_train)
 y_pred = forecaster.predict(fh=np.arange(n_test)+1)
-mae_b = mean_absolute_error(y_valid, y_pred)
-rmse_b = np.sqrt(mean_squared_error(y_valid, y_pred))
-mape_b = mean_absolute_percentage_error(y_valid, y_pred)
+mae_b = mean_absolute_error(y_test, y_pred)
+rmse_b = np.sqrt(mean_squared_error(y_test, y_pred))
+mape_b = mean_absolute_percentage_error(y_test, y_pred)
 fixed = [mae_b, rmse_b, mape_b]
 
 a = ["Roll-forward " + str(i) + "-month-ahead" for i in range(1,n_test+1)]
