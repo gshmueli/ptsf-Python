@@ -24,7 +24,7 @@ forecaster = NaiveForecaster(strategy='last')
 mae, rmse, mape = (lambda: ([], [], []))()
 for fh in np.arange(1,n_test + 1):
     cv = ExpandingWindowSplitter(initial_window=len(y_train), step_length=1, fh=[fh])
-    res = evaluate(forecaster=forecaster, y=y, cv=cv, return_data=True, error_score='raise',
+    res = evaluate(forecaster=forecaster, y=y, cv=cv, return_data=True, 
                         scoring=[MeanAbsoluteError(), mean_absolute_percentage_error])
     mae.append(res['test_MeanAbsoluteError'].mean())
     rmse.append(np.sqrt((res['test_MeanAbsoluteError']**2).mean()))
