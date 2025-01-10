@@ -28,12 +28,10 @@ a['Trailing'] = a['Ridership'].rolling(window=WIDTH, min_periods=WIDTH).mean()
 fig, ax = plt.subplots(figsize=(5.5,3.5))
 ax = plot_series(a['Ridership'], a['Centered'], a['Trailing'], markers=['']*3,
                  labels=['Ridership', 'Centered Moving Average', 'Trailing Moving Average'],
-                 x_label="Time", y_label="Ridership", ax=ax)
+                 x_label="", y_label="Ridership", ax=ax)
 
 ptsf_theme(ax, colors=['black','blue','red'], idx=[0,1,2], lty=['-','--','--'])
-plt.legend(bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=3, fontsize=7)
-plt.subplots_adjust(bottom=0.25)
-
+plt.legend(loc='upper left', fontsize=7)
 plt.savefig('Ch05_Fig_5_2_Amtrak.pdf', format='pdf', bbox_inches='tight')
 plt.tight_layout()
 plt.show()
