@@ -17,10 +17,10 @@ y = ridership.copy() ## use a shorter name
 y_train = y.truncate(after='2001-03-31') 
 y_test = y.truncate(before='2001-04-01')
 
-fc = NaiveForecaster(strategy='mean', sp=1, window_length=12) ## moving average forecaster
-fc.fit(y_train)
-fitted = fc.predict(y_train.index[12:])
-pred = fc.predict(y_test.index)
+ma_trailing = NaiveForecaster(strategy='mean', sp=1, window_length=12)
+ma_trailing.fit(y_train)
+fitted = ma_trailing.predict(y_train.index[12:])
+pred = ma_trailing.predict(y_test.index)
 
 fig, ax = plt.subplots(figsize=(5.5,3.5))
 ax = plot_series(y, fitted, pred, markers=['']*3, x_label="", y_label="Ridership", ax=ax)
