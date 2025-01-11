@@ -12,17 +12,9 @@ style.use('ggplot')
 ridership = pd.read_csv('ptsf-Python/Data/Amtrak.csv', parse_dates=['Month'], index_col='Month')
 ridership.index = ridership.index.to_period('M').to_timestamp()
 
-def centered_moving_average(v, width):
-    if width % 2 == 0: ## width is even
-        left = v.rolling(window=width, min_periods=width, center=True).mean()
-        right = v.rolling(window=width, min_periods=width, center=True).mean().shift(-1)
-        return (left + right) / 2
-    else:
-        return v.rolling(window=width, min_periods=width, center=True).mean()
-
 a = ridership.copy() ## use shorter name
 WIDTH = 12
-a['Centered'] = centered_moving_average(a['Ridership'], width=WIDTH)
+a['Centered'] = a['Ridership'].rolling(window=WIDTH, min_periods=WIDTH, center=True).mean()
 a['Trailing'] = a['Ridership'].rolling(window=WIDTH, min_periods=WIDTH).mean()
 
 fig, ax = plt.subplots(figsize=(5.5,3.5))
