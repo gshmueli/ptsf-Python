@@ -19,7 +19,7 @@ y_test = y.truncate(before='2001-04-01')
 
 fc = NaiveForecaster(strategy='mean', sp=1, window_length=12) ## moving average forecaster
 fc.fit(y_train)
-fitted = fc.predict(np.arange(-len(y_train)+12,1))
+fitted = fc.predict(y_train.index[12:])
 pred = fc.predict(y_test.index)
 
 fig, ax = plt.subplots(figsize=(5.5,3.5))
