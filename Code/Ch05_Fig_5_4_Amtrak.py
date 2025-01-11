@@ -23,7 +23,7 @@ for i, column in enumerate(b.columns):
     ax.get_lines()[0].set_color('black')
     ax.get_lines()[0].set_linewidth(1)
     ax.set_title(column, fontsize=10)
-    ax.set_xlabel('Time')
+    ax.set_xlabel('')
     ax.set_ylabel('Ridership')
     years = [pd.to_datetime(str(year)) for year in [1992, 1996, 2000, 2004]] 
     ax.set_xticks(years) 
