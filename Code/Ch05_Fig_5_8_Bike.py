@@ -25,25 +25,21 @@ rides_train = rides.iloc[:(21*24),:] # 3 weeks
 
 mstl = MSTL(periods=np.array([24, 7*24]), return_components=False)  
 deseas = mstl.fit(rides_train).transform(rides_train)
-ets_opt = AutoETS(auto=False, seasonal=None, n_jobs=-1) # ETS without seasonality
-ets_opt.fit(deseas) # fit the model to seasonally adjusted series
-fh = ForecastingHorizon(np.arange(1,241,1), is_relative=True)
-deseas_pred = ets_opt.predict(fh)
-# get the seasonal component forecasts
-daily_forecaster = NaiveForecaster(strategy="last",sp=24)
-daily_forecaster.fit(mstl.seasonal_['seasonal_24'])
-daily_pred = daily_forecaster.predict(fh)
-weekly_forecaster = NaiveForecaster(strategy="last",sp=7*24)
-weekly_forecaster.fit(mstl.seasonal_['seasonal_168'])
-weekly_pred = weekly_forecaster.predict(fh)
+
+fh = ForecastingHorizon(np.arange(1,241,1), is_relative=True) ## 10 days = 240 hourly forecasts
+deseas_pred = AutoETS(auto=False, seasonal=None, n_jobs=-1).fit(deseas).predict(fh)
+daily_pred = NaiveForecaster(strategy="last",sp=24).fit(mstl.seasonal_['seasonal_24']).predict(fh)
+weekly_pred = NaiveForecaster(strategy="last",sp=7*24).fit(mstl.seasonal_['seasonal_168']).predict(fh)
+
 # create the combined forecasts
 pred = deseas_pred['cnt'].add(daily_pred, fill_value=0).add(weekly_pred, fill_value=0)
+
 # plot the original series and the forecasted series
 fig, ax = plt.subplots(figsize=(6.5,4.5))
 plot_series(rides_train, pred, markers=['',''], y_label="Hourly bike rentals", ax=ax)
 ax.xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=mdates.SU)) # xticks on Sundays 00:00
 ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
- 
+
 ptsf_theme(ax, colors=['black','blue'], idx=[0,1], lty=['-','--'])
 plt.savefig('Ch05_Fig_5_8_Bike.pdf', format='pdf', bbox_inches='tight')
 plt.show()
