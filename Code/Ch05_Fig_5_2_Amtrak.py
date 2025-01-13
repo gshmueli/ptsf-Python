@@ -15,7 +15,7 @@ ridership.index = ridership.index.to_period('M').to_timestamp()
 a = ridership.copy() ## use shorter name
 WIDTH = 12
 a['Centered'] = a['Ridership'].rolling(window=WIDTH, min_periods=WIDTH, center=True).mean()
-a['Trailing'] = a['Ridership'].rolling(window=WIDTH, min_periods=WIDTH).mean()
+a['Trailing'] = a['Ridership'].rolling(window=WIDTH, min_periods=WIDTH, center=False).mean()
 
 fig, ax = plt.subplots(figsize=(5.5,3.5))
 ax = plot_series(a['Ridership'], a['Centered'], a['Trailing'], markers=['']*3,
