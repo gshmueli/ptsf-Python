@@ -32,7 +32,7 @@ daily_pred = NaiveForecaster(strategy="last",sp=24).fit(mstl.seasonal_['seasonal
 weekly_pred = NaiveForecaster(strategy="last",sp=7*24).fit(mstl.seasonal_['seasonal_168']).predict(fh)
 
 # create the combined forecasts
-pred = deseas_pred['cnt'].add(daily_pred, fill_value=0).add(weekly_pred, fill_value=0)
+pred = deseas_pred['cnt'].add(daily_pred).add(weekly_pred)
 
 # plot the original series and the forecasted series
 fig, ax = plt.subplots(figsize=(6.5,4.5))
