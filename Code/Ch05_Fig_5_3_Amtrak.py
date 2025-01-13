@@ -17,7 +17,7 @@ y = ridership.copy() ## use a shorter name
 y_train = y.truncate(after='2001-03-31') 
 y_test = y.truncate(before='2001-04-01')
 
-ma_trailing = NaiveForecaster(strategy='mean', sp=1, window_length=12)
+ma_trailing = NaiveForecaster(strategy='mean', window_length=12)
 ma_trailing.fit(y_train)
 fitted = ma_trailing.predict(y_train.index[12:])
 pred = ma_trailing.predict(y_test.index)
