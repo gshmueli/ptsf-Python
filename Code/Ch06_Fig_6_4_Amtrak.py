@@ -19,12 +19,12 @@ ridership_train, ridership_test = temporal_train_test_split(ridership, test_size
 
 style.use('ggplot')
 
-lm = TrendForecaster()
+lm = TrendForecaster()  ## linear trend model
 lm.fit(ridership_train)
 lm_fitted = lm.predict(ridership_train.index)
 lm_pred = lm.predict(ridership_test.index)
 
-exp_lm = LogTransformer() * TrendForecaster()
+exp_lm = LogTransformer() * TrendForecaster()  ## exponential trend model
 exp_lm.fit(ridership_train)
 exp_lm_fitted = exp_lm.predict(ridership_train.index)
 exp_lm_pred = exp_lm.predict(ridership_test.index)
