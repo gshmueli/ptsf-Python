@@ -3,20 +3,23 @@ import warnings
 import pandas as pd
 import numpy as np
 from sktime.forecasting.model_selection import temporal_train_test_split
-from sktime.forecasting.ardl import ARDL
+import statsmodels.api as sm
 
 warnings.filterwarnings('ignore', category=FutureWarning)
 
 ridership = pd.read_csv('ptsf-Python/Data/Amtrak.csv', parse_dates=['Month'], index_col='Month')
-ridership.index = ridership.index.to_period('M').to_timestamp()
-test_size = len(ridership.truncate(before='2001-04-01'))
-train, test = temporal_train_test_split(ridership, test_size=test_size)
+ridership.index = ridership.index.to_period('M')
+
+# Create dummy variables for the months and drop January (Month_1)
+mat = pd.get_dummies(ridership.index.month, prefix='Month', dtype=float).drop(columns=['Month_1'])
 
 t = np.arange(1, len(ridership)+1)
 columns = [t**i for i in range(3)]
-X = pd.DataFrame(np.vstack(columns).T, index=ridership.index)
-X.columns = ['const', 't', 't**2']
+X = pd.concat([mat, pd.DataFrame(np.vstack(columns).T)], axis=1)
+X.columns = list(mat.columns) + ['const', 't', 't**2']
 
-quad_seas = ARDL(lags=0, order=0, trend='c', seasonal=True, auto_ardl=False)
-quad_seas.fit(train, X=X.iloc[:len(train),1:])
+test_size = len(ridership.truncate(before='2001-04-01'))
+train, test = temporal_train_test_split(ridership, test_size=test_size)
+
+quad_seas = sm.OLS(train.values, X[:len(train)]).fit()
 print(quad_seas.summary())
