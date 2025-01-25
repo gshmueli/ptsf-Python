@@ -1,4 +1,4 @@
-""" Code to create Figure 6.3 """
+""" Code to create Figure 6.3 and Table 6.1"""
 import warnings
 import pandas as pd
 import matplotlib.pyplot as plt
