@@ -5,7 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.style as style
 from sktime.utils import plot_series
-from sktime.forecasting.base import ForecastingHorizon
 from sktime.forecasting.ardl import ARDL
 from sktime.forecasting.model_selection import temporal_train_test_split
 from ptsf_setup import ptsf_theme
@@ -36,6 +35,7 @@ resid_train = train - quad_seas_fitted
 resid_ar = ARDL(lags=1, trend='c', seasonal=False, auto_ardl=False)
 resid_ar.fit(resid_train, X=None)
 resid_ar_fitted =  resid_ar.predict(train.index)
+
 fig, ax = plt.subplots(figsize=(6, 4))
 ax = plot_series(resid_train, resid_ar_fitted, markers=['']*2,
                     labels=None, y_label="Residuals", ax=ax)
@@ -47,4 +47,4 @@ plt.show()
 print(resid_ar.summary())
 
 print("Residuals forecast:" )
-print(resid_ar.predict(ForecastingHorizon(1,is_relative=True)))
+print(resid_ar.predict([1]))
