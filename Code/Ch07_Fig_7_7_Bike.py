@@ -54,7 +54,7 @@ pred = mdl.predict(X.iloc[len(train):,:])
 figure, axis = plt.subplots(nrows=2, sharex=False, figsize=(12, 8))
 figure.subplots_adjust(hspace=0.3)
 
-# Extract lower and upper confidence intervals
+# Extract lower and upper prediction intervals
 alpha=0.05
 pi = mdl.get_prediction(X.iloc[len(train):,:]).summary_frame(alpha=alpha) #95% confidence interval
 
