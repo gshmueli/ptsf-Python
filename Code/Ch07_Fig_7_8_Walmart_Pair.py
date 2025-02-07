@@ -1,4 +1,4 @@
-"""Code to create Figure 7.6 and Table 7.1"""
+"""Code to create Figure 7.8 and Table 7.3"""
 import warnings
 import pandas as pd
 import numpy as np
