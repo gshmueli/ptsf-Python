@@ -29,10 +29,13 @@ warnings.filterwarnings('ignore', category=FutureWarning)
 bike = pd.read_csv('ptsf-Python/Data/BikeSharingDaily.csv',parse_dates=True,index_col=1)
 bike.index = pd.DatetimeIndex(bike.index).to_period('D')
 
-months_order = bike.index.strftime('%b').unique()
-months = pd.get_dummies(pd.Categorical(bike.index.strftime('%b'), 
-                        categories=months_order, ordered=True), dtype=int).drop(['Jan'], axis=1)
-dow = pd.get_dummies(bike.index.strftime('%a'), dtype=int).drop(['Thu'], axis=1)
+def dummies(v, drop):
+    iv = v.unique()  # keeps original order
+    w = pd.get_dummies(pd.Categorical(v,categories=iv,ordered=True),drop_first=drop,dtype=int)
+    return w
+
+months = dummies(bike.index.strftime('%b'), True)
+dow = dummies(bike.index.strftime('%a'), False).drop(['Thu'],axis=1)   # dow = day-of-week
 a = pd.get_dummies(bike['workingday'].astype('category'), prefix='Z', dtype=int)
 a.columns = ['Nonworking' if col == 'Z_0' else 'Working' for col in a.columns]
 b = pd.get_dummies(bike['weathersit'].astype('category'), prefix='Z', dtype=int)
