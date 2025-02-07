@@ -10,8 +10,7 @@ from sktime.performance_metrics.forecasting import mean_absolute_error, mean_squ
         mean_absolute_percentage_error, mean_absolute_scaled_error
 import statsmodels.api as sm
 from statsmodels.tools import add_constant
-from ptsf_setup import ptsf_theme
-from ptsf_setup import ptsf_train_test
+from ptsf_setup import ptsf_theme, ptsf_train_test, ptsf_get_prediction_interval
 
 warnings.filterwarnings('ignore', category=FutureWarning)
 style.use('ggplot')
@@ -54,12 +53,8 @@ pred = mdl.predict(X.iloc[len(train):,:])
 figure, axis = plt.subplots(nrows=2, sharex=False, figsize=(12, 8))
 figure.subplots_adjust(hspace=0.3)
 
-# Extract lower and upper prediction intervals
-alpha=0.05
-pi = mdl.get_prediction(X.iloc[len(train):,:]).summary_frame(alpha=alpha) #95% confidence interval
+pred_interval = ptsf_get_prediction_interval(mdl, X.iloc[len(train):,:], 0.05, 'cnt', test.index)
 
-pred_interval = pd.DataFrame({'lower': pi['obs_ci_lower'], 'upper': pi['obs_ci_upper']}, index=test.index)
-pred_interval.columns = pd.MultiIndex.from_product([['cnt'],[1-alpha], ['lower', 'upper']])
 axis[0] = plot_series(bike['cnt'], fitted, pred, markers=['']*3, ax=axis[0],
             pred_interval=pred_interval,  title="Rentals and Forecasts", labels=None, y_label="Count")
 ptsf_theme(axis[0], colors=['black','blue','blue'], idx=[0,1,2], lty=['-','-','--'])
