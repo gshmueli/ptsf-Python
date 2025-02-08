@@ -39,16 +39,16 @@ def accuracy_df(method, y, y_pred, y_train):
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 print("Current working directory:", os.getcwd())
-ridership = pd.read_csv('ptsf-Python/Data/Amtrak.csv')
-ridership['Month'] = pd.to_datetime(ridership['Month'], format='%Y %b')
-ridership.set_index('Month', inplace=True)
+
+ridership = pd.read_csv('ptsf-Python/Data/Amtrak.csv', parse_dates=['Month'],
+                        date_parser=lambda x: pd.to_datetime(x, format='%Y %b')).set_index('Month')
 ridership.index = ridership.index.to_period('M').to_timestamp('M')  # Convert to month-end frequency
 
-TEST_SIZE = 6
+TEST_SIZE = 36
 SP = 12
 train, test = temporal_train_test_split(ridership, test_size=TEST_SIZE)
 
-nnetar = NNetAR(p=11, P=1, period=SP, n_nodes=7, n_networks=20, scale_inputs=False, auto=True)
+nnetar = NNetAR(p=11, P=1, period=SP, n_nodes=7, n_networks=20, scale_inputs=False, auto=False)
 nnetar.fit(train)
 pred = nnetar.predict(test.index)
 fitted = nnetar.predict(train.index[SP:])
