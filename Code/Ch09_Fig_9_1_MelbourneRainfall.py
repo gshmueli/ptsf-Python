@@ -27,7 +27,7 @@ sns.lineplot(data=month_year_rain, x='Month', y='pct', hue='Year', marker='', le
 sns.lineplot(data=month_rain, x='Month', y='pct', color='black', linestyle='--', linewidth=2, label='Average')
 
 # Add labels and legend
-plt.xlabel('')
+plt.xlabel('Month')
 plt.ylabel('Percent of rainy days per month')
 plt.legend(title='Year', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.grid(True)
