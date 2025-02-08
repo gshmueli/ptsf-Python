@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.style as style
-import seaborn as sns
+import seaborn as sns # the seaborn package makes it easier to produce a seasonal plot
 
 style.use('ggplot')
 
