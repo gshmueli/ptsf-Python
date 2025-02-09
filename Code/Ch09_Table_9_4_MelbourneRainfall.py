@@ -24,19 +24,14 @@ lr_model = LogisticRegression(random_state=0, fit_intercept=True, penalty=None)
 lr_model.fit(exog_train, rain_train['rainy'])
 
 def performance_summary(label, pred, actual):
-    tn, fp, fn, tp = confusion_matrix(actual, pred).ravel()
     print(f"{label} Confusion Matrix")
-    print("        Prediction")
-    print("Actual     0     1")
-    print(f"  0     {tn}   {fp}")
-    print(f"  1     {fn}   {tp}")
-    print("\n\n")
-    print(f"Accuracy : {(tp+tn)/len(actual):.4f}")
-    print(f"Sensitivity : {(tp/(tp+fn)):.4f}")
-    print(f"Specificity : {(tn/(tn+fp)):.4f}")
+    columns = pd.MultiIndex.from_product([['Prediction'], [0, 1]])
+    Z = pd.DataFrame(confusion_matrix(actual, pred), index=[0, 1], columns=columns)
+    Z.index.name = 'Actual'
+    tn, fp, fn, tp = confusion_matrix(actual, pred).ravel()  # tn=true neg, fp=false pos, ...
+    metrics = pd.Series({"Accuracy": (tp + tn) / len(actual),"Sensitivity": tp / (tp + fn),
+                        "Specificity": tn / (tn + fp)})
+    print(f"{Z}\n\n{metrics.to_string(float_format='{:.4f}'.format)}")
 
-train_pred = lr_model.predict(exog_train)
-performance_summary("Training", train_pred, rain_train['rainy'])
-
-test_pred = lr_model.predict(exog_test)
-performance_summary("Test", test_pred, rain_test['rainy'])
+performance_summary("Training", lr_model.predict(exog_train), rain_train['rainy'])
+performance_summary("Test", lr_model.predict(exog_test), rain_test['rainy'])
