@@ -15,6 +15,6 @@ y_train, y_test = temporal_train_test_split(y, test_size=n_test)
 
 hwin = AutoETS(auto=False, error="mul", trend="add", seasonal="add", sp=12, n_jobs=-1)
 hwin.fit(y_train)
-print(hwin._fitted_forecaster.summary())
+print(hwin.summary())
 print("\n\nFinal states:\n=============")
 print(hwin._fitted_forecaster.states.tail(12))
