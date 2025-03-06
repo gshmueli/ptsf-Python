@@ -8,7 +8,7 @@ from sktime.utils import plot_series
 from sktime.split import temporal_train_test_split
 from sktime.performance_metrics.forecasting import mean_absolute_error, mean_squared_error, \
         mean_absolute_percentage_error, mean_absolute_scaled_error
-from r_ARIMA import r_ARIMA
+from PyFableARIMA import PyFableARIMA
 from ptsf_setup import ptsf_theme
 from ptsf_setup import ptsf_train_test
 
@@ -36,8 +36,8 @@ y_train, X_train = train['Weekly_Sales'], train['IsHoliday']
 y_test, X_test = test['Weekly_Sales'], test['IsHoliday']
 
 # Automated ARIMA fitted to the training set
-model = [r_ARIMA(formula='Weekly_Sales').fit(y=y_train, X=None),                  # ignore IsHoliday
-         r_ARIMA(formula='Weekly_Sales ~ IsHoliday').fit(y=y_train, X=X_train)]      # include IsHoliday
+SAR1 = PyFableARIMA(formula='Weekly_Sales').fit(y=y_train, X=None)                 # ignore IsHoliday
+AR2_IsHoliday = PyFableARIMA(formula='Weekly_Sales ~ IsHoliday').fit(y=y_train, X=X_train)      # include IsHoliday
 
 def calc_residuals(obs, pred):
     return pd.Series(obs.values.flatten() - pred.squeeze().values, index=obs.index)
@@ -50,8 +50,8 @@ def apply_model(model, y_train, y_test, X_test, fitted, pred, resid_train, resid
 
 fitted, pred, resid_train, resid_test = [], [], [], []
 
-apply_model(model[0], y_train, y_test, None, fitted, pred, resid_train, resid_test)
-apply_model(model[1], y_train, y_test, X_test, fitted, pred, resid_train, resid_test)
+apply_model(SAR1, y_train, y_test, None, fitted, pred, resid_train, resid_test)
+apply_model(AR2_IsHoliday, y_train, y_test, X_test, fitted, pred, resid_train, resid_test)
 
 figure, axis = plt.subplots(nrows=2, sharex=False, figsize=(12, 8))
 
@@ -61,8 +61,8 @@ axis[0] = plot_series(one_pair['Weekly_Sales'], fitted[0], fitted[1], pred[0], p
                       markers=['']*5, ax=axis[0], title="Sales and Forecasts", y_label="Sales")
 ptsf_theme(axis[0], colors=['black','green','red','green','red'], 
            idx=[0,1,2,3,4], lty=['-','-','-','--','--'], 
-           labels=['Actual','SAR1 (fitted)','AR2.IsHoliday (fitted)',
-                              'SAR1 (pred)','AR2.IsHoliday (pred)'],
+           labels=['Actual','SAR1 (fitted)','AR2_IsHoliday (fitted)',
+                              'SAR1 (pred)','AR2_IsHoliday (pred)'],
            do_legend=True
            )
 axis[0] = ptsf_train_test(axis[0], train.index, test.index)
@@ -70,21 +70,21 @@ axis[0] = ptsf_train_test(axis[0], train.index, test.index)
 axis[1] = plot_series(resid_train[0], resid_train[1], resid_test[0], resid_test[1], 
                       markers=['']*4, title="Errors", labels=None, y_label="Error", ax=axis[1])
 ptsf_theme(axis[1], colors=['green','red']*2, idx=[0,1,2,3], lty=['-','-','--','--'], 
-           labels = ['SAR1 (train)','AR2.IsHoliday (train)','SAR1 (test)','AR2.IsHoliday (test)'],
+           labels = ['SAR1 (train)','AR2_IsHoliday (train)','SAR1 (test)','AR2_IsHoliday (test)'],
            do_legend=True)
 plt.savefig('Ch07_Fig_7_8_Walmart_Pair.pdf', format='pdf', bbox_inches='tight')
 plt.show()
 
 print("SAR1")
-model[0].r_ARIMA_report()
+SAR1.PyFableARIMA_report()
 
-print("AR2.IsHoliday")
-model[1].r_ARIMA_report()
+print("AR2_IsHoliday")
+AR2_IsHoliday.PyFableARIMA_report()
 
 df4 = pd.concat([accuracy_df("SAR1 (training)", y_train, fitted[0], y_train), \
                 accuracy_df("SAR1 (test)", y_test, pred[0], y_train), 
-                accuracy_df("AR2.IsHoliday (training)", y_train, fitted[1], y_train), \
-                accuracy_df("AR2.IsHoliday (test)", y_test, pred[1], y_train)])
+                accuracy_df("AR2_IsHoliday (training)", y_train, fitted[1], y_train), \
+                accuracy_df("AR2_IsHoliday (test)", y_test, pred[1], y_train)])
 df4['MAPE'] = df4['MAPE'].multiply(100).map('{:,.2f}'.format) ## to match book format
 df5 = df4.round({'MAE': 1, 'RMSE': 1, 'MASE': 3})[['RMSE', 'MAE', 'MAPE','MASE']].reset_index()
 df5.rename(columns={'index': 'Series'}, inplace=True)

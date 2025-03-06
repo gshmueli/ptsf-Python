@@ -8,7 +8,7 @@ from sktime.utils import plot_series
 from sktime.split import temporal_train_test_split
 from sktime.performance_metrics.forecasting import mean_absolute_error, mean_squared_error, \
         mean_absolute_percentage_error, mean_absolute_scaled_error
-from r_ARIMA import r_ARIMA
+from PyFableARIMA import PyFableARIMA
 from ptsf_setup import ptsf_theme
 from ptsf_setup import ptsf_train_test
 
@@ -34,8 +34,8 @@ test_size = len(one_pair.truncate(before='2012-02-06'))
 train, test = temporal_train_test_split(one_pair, test_size=test_size)
 
 # Automated ARIMA fitted to the training set
-model = [r_ARIMA(formula='Weekly_Sales').fit(train),                  # narrow search for optimal
-         r_ARIMA(formula='Weekly_Sales', stepwise=False).fit(train)]  # broader search for optimal
+model = [PyFableARIMA(formula='Weekly_Sales').fit(train),                  # narrow search for optimal
+         PyFableARIMA(formula='Weekly_Sales', stepwise=False).fit(train)]  # broad search for optimal
 
 def calc_residuals(obs, pred):
     return pd.Series(obs.values.flatten() - pred.squeeze().values, index=obs.index)
@@ -58,8 +58,8 @@ axis[0] = plot_series(one_pair, fitted[0], fitted[1], pred[0], pred[1],
                       markers=['']*5, ax=axis[0], title="Sales and Forecasts", y_label="Sales")
 ptsf_theme(axis[0], colors=['black','green','red','green','red'], 
            idx=[0,1,2,3,4], lty=['-','-','-','--','--'], 
-           labels=['Actual','Faster (fitted)','Slower (fitted)',
-                              'Faster (pred)','Slower (pred)'],
+           labels=['Actual','Narrow (fitted)','Broad (fitted)',
+                              'Narrow (pred)','Broad (pred)'],
            do_legend=True
            )
 axis[0] = ptsf_train_test(axis[0], train.index, test.index)
@@ -67,21 +67,21 @@ axis[0] = ptsf_train_test(axis[0], train.index, test.index)
 axis[1] = plot_series(resid_train[0], resid_train[1], resid_test[0], resid_test[1], 
                       markers=['']*4, title="Errors", labels=None, y_label="Error", ax=axis[1])
 ptsf_theme(axis[1], colors=['green','red']*2, idx=[0,1,2,3], lty=['-','-','--','--'], 
-           labels = ['Faster (train)','Slower (train)','Faster (test)','Slower (test)'],
+           labels = ['Narrow (train)','Broad (train)','Narrow (test)','Broad (test)'],
            do_legend=True)
 plt.savefig('Ch07_Fig_7_6_Walmart_Pair.pdf', format='pdf', bbox_inches='tight')
 plt.show()
 
-print("Faster search optimal ARIMA")
-model[0].r_ARIMA_report()
+print("Narrow search optimal ARIMA")
+model[0].PyFableARIMA_report()
 
-print("Slower search optimal ARIMA")
-model[1].r_ARIMA_report()
+print("Broad search optimal ARIMA")
+model[1].PyFableARIMA_report()
 
-df4 = pd.concat([accuracy_df("Faster (training)", train, fitted[0], train), \
-                accuracy_df("Faster (test)", test, pred[0], train), 
-                accuracy_df("Slower (training)", train, fitted[1], train), \
-                accuracy_df("Slower (test)", test, pred[1], train)])
+df4 = pd.concat([accuracy_df("Narrow (training)", train, fitted[0], train), \
+                accuracy_df("Narrow (test)", test, pred[0], train), 
+                accuracy_df("Broad (training)", train, fitted[1], train), \
+                accuracy_df("Broad (test)", test, pred[1], train)])
 df4['MAPE'] = df4['MAPE'].multiply(100).map('{:,.2f}'.format) ## to match book format
 df5 = df4.round({'MAE': 1, 'RMSE': 1, 'MASE': 3})[['RMSE', 'MAE', 'MAPE','MASE']].reset_index()
 df5.rename(columns={'index': 'Series'}, inplace=True)

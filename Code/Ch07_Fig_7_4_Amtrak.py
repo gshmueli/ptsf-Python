@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 from sktime.forecasting.model_selection import temporal_train_test_split
 from sktime.utils import plot_series
-from r_ARIMA import r_ARIMA
+from PyFableARIMA import PyFableARIMA
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import matplotlib.style as style
@@ -32,7 +32,7 @@ quad_seas = sm.OLS(train.values, X[:len(train)]).fit()
 fitted = quad_seas.predict(X[:len(train)])
 resid = pd.Series(train.values.flatten() - fitted.values, index=train.index, name='resid')
 
-resid_ar = r_ARIMA(formula='resid ~ 1 + pdq(1,0,0)')
+resid_ar = PyFableARIMA(formula='resid ~ 1 + pdq(1,0,0)')
         # '1 +' is used to add a constant to the ARIMA model
         # for seasonal '+ PDQ(P,D,Q)' (the default is PDQ(0,0,0))
 resid_ar.fit(resid)
@@ -47,7 +47,7 @@ ax = ptsf_train_test(ax, train.index, test.index)
 plt.savefig('Ch07_Fig_7_4_Amtrak.pdf', format='pdf', bbox_inches='tight')
 plt.show()
 
-resid_ar.r_ARIMA_report()
+resid_ar.PyFableARIMA_report()
 
 print("Residuals forecast:" )
 print(resid_ar.predict([1]))
