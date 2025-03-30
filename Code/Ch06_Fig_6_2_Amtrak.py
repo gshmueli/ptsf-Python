@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.style as style
 from sktime.utils import plot_series
 from sktime.forecasting.model_selection import temporal_train_test_split
-from sktime.forecasting.trend import TrendForecaster
+from sktime.forecasting.ardl import ARDL
 from ptsf_setup import ptsf_theme
 
 warnings.filterwarnings('ignore', category=FutureWarning)
@@ -17,8 +17,8 @@ ridership_train, ridership_test = temporal_train_test_split(ridership, test_size
 
 style.use('ggplot')
 
-lm = TrendForecaster()
-lm.fit(ridership_train)
+lm = ARDL(lags=0, trend='ct', seasonal=False, auto_ardl=False)
+lm.fit(ridership_train, X=None)
 fitted = lm.predict(ridership_train.index)
 
 fig, ax = plt.subplots(figsize=(5.5,3.5))
