@@ -7,8 +7,7 @@ import matplotlib.lines as mlines
 from matplotlib.legend_handler import HandlerTuple
 from sktime.utils import plot_series
 from sktime.forecasting.model_selection import temporal_train_test_split
-from sktime.forecasting.trend import TrendForecaster
-from sktime.forecasting.trend import PolynomialTrendForecaster
+from sktime.forecasting.ardl import ARDL
 from sktime.transformations.series.boxcox import LogTransformer
 from ptsf_setup import ptsf_theme
 from ptsf_setup import ptsf_train_test
@@ -22,17 +21,17 @@ ridership_train, ridership_test = temporal_train_test_split(ridership, test_size
 
 style.use('ggplot')
 
-lm = TrendForecaster()  ## linear trend model
+lm = ARDL(lags=0, trend='ct', seasonal=False, auto_ardl=False)
 lm.fit(ridership_train)
 lm_fitted = lm.predict(ridership_train.index)
 lm_pred = lm.predict(ridership_test.index)
 
-qm = PolynomialTrendForecaster(degree=2)  ## quadratic trend model
+qm = ARDL(lags=0, trend='ctt', seasonal=False, auto_ardl=False)
 qm.fit(ridership_train)
 qm_fitted = qm.predict(ridership_train.index)
 qm_pred = qm.predict(ridership_test.index)
 
-exp_lm = LogTransformer() * TrendForecaster()  ## exponential trend model
+exp_lm = LogTransformer() * ARDL(lags=0, trend='ct', seasonal=False, auto_ardl=False)
 exp_lm.fit(ridership_train)
 exp_lm_fitted = exp_lm.predict(ridership_train.index)
 exp_lm_pred = exp_lm.predict(ridership_test.index)
