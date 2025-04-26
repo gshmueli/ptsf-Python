@@ -24,7 +24,7 @@ warnings.filterwarnings("ignore", message="X does not have valid feature names")
 style.use('ggplot')
 
 # Set random seed for reproducibility
-RANDOM_SEED = 42
+RANDOM_SEED = 43
 np.random.seed(RANDOM_SEED)
 
 def accuracy_df(method, y, y_pred, y_train):
@@ -44,11 +44,18 @@ ridership = pd.read_csv('ptsf-Python/Data/Amtrak.csv', parse_dates=['Month'],
                         date_parser=lambda x: pd.to_datetime(x, format='%Y %b')).set_index('Month')
 ridership.index = ridership.index.to_period('M').to_timestamp('M')  # Convert to month-end frequency
 
-TEST_SIZE = 36
+TRAIN_SIZE = len(ridership.index) - 36
 SP = 12
-train, test = temporal_train_test_split(ridership, test_size=TEST_SIZE)
+#####################################################################
+TEST_SIZE = 36
+p=11
+P=1
+SCALE_INPUTS = True
+#####################################################################
+train = ridership.iloc[0:TRAIN_SIZE,:]
+test = ridership.iloc[TRAIN_SIZE:(TRAIN_SIZE+TEST_SIZE),:]
 
-nnetar = NNetAR(p=11, P=1, period=SP, n_nodes=7, n_networks=20, scale_inputs=False, auto=False)
+nnetar = NNetAR(p=p, P=P, period=SP, n_nodes=7, n_networks=20, scale_inputs=SCALE_INPUTS, auto=False)
 nnetar.fit(train)
 pred = nnetar.predict(test.index)
 fitted = nnetar.predict(train.index[SP:])
