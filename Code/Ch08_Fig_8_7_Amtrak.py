@@ -1,4 +1,4 @@
-""" Code to create Figure 8.7 """
+""" Code to create Figure 8.7 and Table 8.5 """
 import os
 import warnings
 import random
@@ -87,7 +87,7 @@ ridership.index = ridership.index.to_period('M').to_timestamp('M')  # Convert to
 TEST_SIZE = 36
 train, test = temporal_train_test_split(ridership, test_size=TEST_SIZE)
 
-SP = 12 # SP = Seasonal Period
+SP = 12 # Seasonal Period
 BATCH_SIZE = 1
 regressor = KerasRegressor(build_fn=create_lstm_model, batch_size=BATCH_SIZE,
                              look_back=SP, epochs=400, verbose=2,shuffle=False,
