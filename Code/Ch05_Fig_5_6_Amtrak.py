@@ -1,4 +1,4 @@
-""" Code to create Figure 5.6 """
+""" Code to create Figure 5.6 and Table 5.2 """
 import warnings
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -32,3 +32,8 @@ ptsf_theme(ax, colors=['black','blue','blue'], idx=[0,1,2], lty=['-','-','--'])
 ptsf_train_test(ax, y_train.index, y_test.index)
 plt.savefig('Ch05_Fig_5_6_Amtrak.pdf', format='pdf', bbox_inches='tight')
 plt.show()
+
+print(hwin.summary())
+print("\n\nFinal states:\n=============")
+print(hwin._fitted_forecaster.states.tail(12))
+
