@@ -7,7 +7,7 @@ import matplotlib.style as style
 from sktime.forecasting.model_selection import temporal_train_test_split
 from sktime.utils import plot_series
 from sktime.forecasting.ardl import ARDL
-from PyFableARIMA import PyFableARIMA
+from sktime.forecasting.PyFableARIMA import PyFableARIMA
 from ptsf_setup import ptsf_theme, ptsf_train_test
 
 warnings.filterwarnings('ignore', category=FutureWarning)

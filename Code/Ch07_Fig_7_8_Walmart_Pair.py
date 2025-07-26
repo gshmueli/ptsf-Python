@@ -8,7 +8,7 @@ from sktime.utils import plot_series
 from sktime.split import temporal_train_test_split
 from sktime.performance_metrics.forecasting import mean_absolute_error, mean_squared_error, \
         mean_absolute_percentage_error, mean_absolute_scaled_error
-from PyFableARIMA import PyFableARIMA
+from sktime.forecasting.PyFableARIMA import PyFableARIMA
 from ptsf_setup import ptsf_theme
 from ptsf_setup import ptsf_train_test
 

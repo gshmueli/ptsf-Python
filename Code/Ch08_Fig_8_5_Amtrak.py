@@ -8,13 +8,12 @@ import matplotlib.style as style
 
 from sktime.utils import plot_series
 from sktime.forecasting.model_selection import temporal_train_test_split
+from sktime.forecasting.nnetar import NNetAR
 from sktime.performance_metrics.forecasting import mean_absolute_error, mean_squared_error, \
         mean_absolute_percentage_error, mean_absolute_scaled_error
 from sklearn.exceptions import DataConversionWarning
 from ptsf_setup import ptsf_theme
 from ptsf_setup import ptsf_train_test
-
-from nnetar import NNetAR
 
 warnings.filterwarnings('ignore', category=FutureWarning)
 warnings.filterwarnings("ignore", message="RecursiveReductionForecaster is experimental")

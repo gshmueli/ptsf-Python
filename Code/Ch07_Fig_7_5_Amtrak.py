@@ -8,7 +8,7 @@ from sktime.utils import plot_series
 from sktime.forecasting.ardl import ARDL
 from sktime.forecasting.model_selection import temporal_train_test_split
 from statsmodels.graphics.tsaplots import plot_acf
-from PyFableARIMA import PyFableARIMA
+from sktime.forecasting.PyFableARIMA import PyFableARIMA
 
 warnings.filterwarnings('ignore', category=FutureWarning)
 
