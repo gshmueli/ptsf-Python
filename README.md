@@ -1,7 +1,10 @@
 # Practical Time Series Forecasting with Python
-Data, code, and setup instructions for the textbook [Practical Time Series Forecasting with Python: A Hands-On Guide](https://www.forecastingbook.com) by Shmueli & Berger
+[Data](Data), [code](Code), and [setup](SETUP.md) instructions for the textbook [Practical Time Series Forecasting with Python: A Hands-On Guide](https://www.forecastingbook.com) by Shmueli & Berger
+
 
 ## About the Book
+
+<img align="right" width="30%" height="30%" src="assets/book_cover_medium.png">
 
 _Practical Time Series Forecasting with Python: A Hands-On Guide_ provides an applied approach to time-series forecasting. 
 Forecasting is an essential component of predictive analytics. 
@@ -19,7 +22,6 @@ This edition includes:
 * Data, Python code, and instructor materials on companion website
 * Affordable and globally-available textbook, available in hardcover, paperback, and ebook formats
 * _Practical Time Series Forecasting with Python: A Hands-On Guide_ is the perfect textbook for upper-undergraduate, graduate and MBA-level courses as well as professional programs in data science and business analytics. The book is also designed for practitioners in the fields of operations research, supply chain management, marketing, economics, information systems, finance, and management.
-* Practical Time Series Forecasting with R: A Hands-On Guide
 
 ## Details
 * 250 pages
